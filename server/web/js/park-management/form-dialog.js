@@ -161,8 +161,8 @@ const ParkFormDialog = {
                 
                 const data = {
                     ...this.form,
-                    start_time: formatDate(this.form.start_time),
-                    end_time: formatDate(this.form.end_time)
+                    start_time: this.form.start_time ? new Date(this.form.start_time).toISOString() : '',
+                    end_time: this.form.end_time ? new Date(this.form.end_time).toISOString() : ''
                 };
                 
                 let result;
