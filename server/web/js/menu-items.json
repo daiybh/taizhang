@@ -8,7 +8,7 @@
     { "index": "2-2", "label": "公司管理", "component": "company-management" },
     { "index": "2-3", "label": "厂外运输车辆", "component": "external-vehicle-management" },
     { "index": "2-4", "label": "厂内运输车辆", "component": "internal-vehicle-management" },
-    { "index": "2-5", "label": "非道路移动机械", "component": "placeholder" },
+    { "index": "2-5", "label": "非道路移动机械", "component": "nonroad-management" },
     { "index": "2-6", "label": "二维码管理", "component": "placeholder" },
     { "index": "2-7", "label": "用户权限", "component": "placeholder" },
     { "index": "2-8", "label": "部门管理", "component": "placeholder" }

@@ -75,3 +75,6 @@ const RenewalRecords = {
         resetSearch() { this.searchForm = { parkName: '', parkCode: '' }; this.search(); }
     }
 };
+
+// Register component for dynamic registry
+if (window && window.__component_registry__) { window.__component_registry__['renewal-records'] = RenewalRecords; }

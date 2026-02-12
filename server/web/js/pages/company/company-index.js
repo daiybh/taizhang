@@ -108,3 +108,6 @@ const CompanyManagement = {
         handleSuccess() { this.loadList(); }
     }
 };
+
+// Register component for dynamic registry
+if (window && window.__component_registry__) { window.__component_registry__['company-management'] = CompanyManagement; }

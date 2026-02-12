@@ -103,3 +103,6 @@ const ExternalVehicleManagement = {
         viewDetail(row) { ElMessage.info('详情功能开发中...'); }
     }
 };
+
+// Register component for dynamic registry
+if (window && window.__component_registry__) { window.__component_registry__['external-vehicle-management'] = ExternalVehicleManagement; }

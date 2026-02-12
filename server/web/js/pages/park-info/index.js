@@ -50,3 +50,6 @@ const ParkInfo = {
         async toggleEdit() { if (this.isEditing) { try { const payload = { name: this.park.name, contact_name: this.park.contact_name, contact_phone: this.park.contact_phone }; const result = await request(`/parks/${this.park.id}`, { method: 'PUT', body: JSON.stringify(payload) }); if (result.code === 0) { ElMessage.success('保存成功'); this.isEditing = false; } } catch (error) { console.error('Save park failed:', error); } } else { this.isEditing = true; } }
     }
 };
+
+// Register component for dynamic registry
+if (window && window.__component_registry__) { window.__component_registry__['park-info'] = ParkInfo; }

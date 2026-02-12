@@ -237,3 +237,5 @@ const InternalVehicleManagement = {
             }
         }
 };
+// Register component for dynamic registry
+if (window && window.__component_registry__) { window.__component_registry__['internal-vehicle-management'] = InternalVehicleManagement; }

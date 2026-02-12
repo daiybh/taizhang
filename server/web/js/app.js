@@ -66,8 +66,8 @@ async function initApp() {
             { index: '2-1', label: '车场信息', component: 'park-info' },
             { index: '2-2', label: '公司管理', component: 'company-management' },
             { index: '2-3', label: '厂外运输车辆', component: 'external-vehicle-management' },
-            { index: '2-4', label: '厂内运输车辆', component: 'placeholder' },
-            { index: '2-5', label: '非道路移动机械', component: 'placeholder' },
+            { index: '2-4', label: '厂内运输车辆', component: 'internal-vehicle-management' },
+            { index: '2-5', label: '非道路移动机械', component: 'nonroad-management' },
             { index: '2-6', label: '二维码管理', component: 'placeholder' },
             { index: '2-7', label: '用户权限', component: 'placeholder' },
             { index: '2-8', label: '部门管理', component: 'placeholder' }
@@ -77,22 +77,31 @@ async function initApp() {
     const menuItemsInitial = override || fetchedMenu || defaultMenu;
 
     // 根据菜单项动态收集需要注册的组件（从静态对象映射到实际组件对象）
-    const componentRegistry = {
-        'park-management': ParkManagement,
-        'renewal-records': RenewalRecords,
-        'park-info': ParkInfo,
-        'company-management': CompanyManagement,
-        'external-vehicle-management': ExternalVehicleManagement,
-        'internal-vehicle-management': InternalVehicleManagement,
-        'placeholder': Placeholder
-    };
+     const componentRegistry = {};
 
+    // 优先使用页面脚本通过 window.__component_registry__ 注册的组件（解决脚本加载顺序问题）
+    try {
+        console.log('Attempting to register components from window.__component_registry__');
+        if (window && window.__component_registry__) {
+            // 遍历 window.__component_registry__ 中的组件，注册到 componentRegistry 中
+            console.log('Found window.__component_registry__:', Object.keys(window.__component_registry__));
+            for (const name of Object.keys(window.__component_registry__)) {
+                console.log(`Registering component from window.__component_registry__: ${name}`);
+                componentRegistry[name] = window.__component_registry__[name];
+            }
+        }
+    } catch (e) {
+        console.warn('使用 window.__component_registry__ 优先注册组件失败，使用静态映射', e);
+    }
+    
     const componentsToRegister = {};
     try {
         const allItems = [...(menuItemsInitial.admin || []), ...(menuItemsInitial.park || [])];
         for (const it of allItems) {
-            if (it && it.component && componentRegistry[it.component]) {
-                componentsToRegister[it.component] = componentRegistry[it.component];
+                console.log(`Registering component for menu item ${it.label}: ${it.component}`);
+            if (it && it.component && window.__component_registry__[it.component]) {
+                console.log(`aaaa Registering component for menu item ${it.label}: ${it.component}`);
+                componentsToRegister[it.component] = window.__component_registry__[it.component];
             }
         }
     } catch (e) {
