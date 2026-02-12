@@ -84,11 +84,16 @@ func main() {
 	r.Use(middleware.CORS())
 	r.Use(middleware.Logging())
 
+	// 静态文件服务
+	r.Static("/web", "./web")
+	r.StaticFile("/", "./web/login.html")
+
 	// 注册路由
 	setupRoutes(r, handlers)
 
 	// 启动服务器
 	log.Printf("Server starting on port %s", cfg.Server.Port)
+	log.Printf("Web interface available at http://localhost:%s", cfg.Server.Port)
 	if err := r.Run(":" + cfg.Server.Port); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
