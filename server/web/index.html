@@ -6,6 +6,19 @@
     <title>台账管理系统</title>
     <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
     <link rel="stylesheet" href="./css/style.css">
+    <script>
+        // 页面最早执行的重定向检查：如果未登录且不是登录页，则跳转到登录页
+        (function(){
+            try {
+                var path = location.pathname || '';
+                if (path !== '/web/login.html' && !sessionStorage.getItem('username')) {
+                    window.location.replace('/web/login.html');
+                }
+            } catch (e) {
+                // ignore
+            }
+        })();
+    </script>
 </head>
 <body>
     <div id="app" v-cloak>
@@ -42,7 +55,7 @@
                         <el-menu-item index="1-2">续费记录</el-menu-item>
                     </el-sub-menu>
                     
-                    <el-sub-menu index="2" v-if="userRole === 'park' || userRole === 'admin'">
+                    <el-sub-menu index="2" v-if="userRole === 'park'">
                         <template #title>
                             <el-icon><Setting /></el-icon>
                             <span>车场层</span>
@@ -57,6 +70,9 @@
                         <el-menu-item index="2-8">部门管理</el-menu-item>
                     </el-sub-menu>
                 </el-menu>
+            </div>
+            <div class="sidebar-footer" style="padding:16px; text-align:center;">
+                <el-button type="danger" @click="handleLogout">退出登录</el-button>
             </div>
             
             <!-- 内容区 -->

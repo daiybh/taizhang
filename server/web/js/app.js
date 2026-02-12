@@ -1,6 +1,11 @@
 const { createApp } = Vue;
 const { ElMessage, ElMessageBox } = ElementPlus;
 
+// 如果没有登录信息则重定向到登录页（明确使用 /web/login.html）
+if (!sessionStorage.getItem('username') && location.pathname !== '/web/login.html') {
+    window.location.href = '/web/login.html';
+}
+
 // API 基础路径
 const API_BASE = '/api/v1';
 
@@ -44,10 +49,10 @@ async function request(url, options = {}) {
 app = createApp({
     data() {
         return {
-            // 用户信息
-            currentUser: 'admin',
-            userRole: 'admin', // admin: 管理层, park: 车场层
-            
+            // 用户信息从 sessionStorage 读取（由登录页写入）
+            currentUser: sessionStorage.getItem('username') || 'admin',
+            userRole: sessionStorage.getItem('userRole') || 'admin', // admin: 管理层, park: 车场层
+
             // 当前激活的菜单
             activeMenu: 'welcome'
         };
@@ -84,8 +89,10 @@ app = createApp({
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
+                // 清除登录信息并跳转到登录页
+                try { sessionStorage.removeItem('username'); sessionStorage.removeItem('userRole'); sessionStorage.removeItem('parkCode'); sessionStorage.removeItem('authenticated'); } catch (e) {}
                 ElMessage.success('退出成功');
-                // 这里可以添加跳转到登录页的逻辑
+                window.location.href = '/web/login.html';
             }).catch(() => {});
         }
     },
