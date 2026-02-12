@@ -1,0 +1,142 @@
+/* 全局样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 应用容器 */
+#app {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 头部样式 */
+.header {
+    background: #409EFF;
+    color: white;
+    padding: 0 20px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.header h1 {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.user-info i {
+    margin-right: 8px;
+}
+
+/* 主容器 */
+.main-container {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+/* 侧边栏 */
+.sidebar {
+    width: 200px;
+    background: #304156;
+    overflow-y: auto;
+}
+
+.el-menu {
+    border-right: none;
+}
+
+/* 内容区 */
+.content {
+    flex: 1;
+    padding: 20px;
+    background: #f0f2f5;
+    overflow-y: auto;
+}
+
+/* 页面头部 */
+.page-header {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.05);
+}
+
+.page-header h2 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.page-header p {
+    color: #666;
+    font-size: 14px;
+}
+
+/* 页面内容 */
+.page-content {
+    background: white;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.05);
+}
+
+/* 搜索栏 */
+.search-bar {
+    margin-bottom: 20px;
+}
+
+/* 工具栏 */
+.toolbar {
+    margin-bottom: 20px;
+}
+
+/* 欢迎页 */
+.welcome-page {
+    text-align: center;
+    padding-top: 100px;
+}
+
+.welcome-page h2 {
+    font-size: 32px;
+    color: #409EFF;
+    margin-bottom: 20px;
+}
+
+.welcome-page p {
+    font-size: 16px;
+    color: #666;
+}
+
+/* 占位页 */
+.placeholder-page {
+    text-align: center;
+    padding-top: 100px;
+}
+
+.placeholder-page h2 {
+    font-size: 24px;
+    color: #909399;
+    margin-bottom: 20px;
+}
+
+.placeholder-page p {
+    font-size: 14px;
+    color: #999;
+}

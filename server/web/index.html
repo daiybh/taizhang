@@ -5,101 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>台账管理系统</title>
     <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-        }
-        
-        #app {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .header {
-            background: #409EFF;
-            color: white;
-            padding: 0 20px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 4px rgba(0,0,0,.1);
-        }
-        
-        .header h1 {
-            font-size: 20px;
-            font-weight: 500;
-        }
-        
-        .main-container {
-            flex: 1;
-            display: flex;
-            overflow: hidden;
-        }
-        
-        .sidebar {
-            width: 200px;
-            background: #304156;
-            overflow-y: auto;
-        }
-        
-        .content {
-            flex: 1;
-            padding: 20px;
-            background: #f0f2f5;
-            overflow-y: auto;
-        }
-        
-        .el-menu {
-            border-right: none;
-        }
-        
-        .page-header {
-            background: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,.05);
-        }
-        
-        .page-header h2 {
-            font-size: 18px;
-            font-weight: 500;
-            margin-bottom: 10px;
-        }
-        
-        .page-content {
-            background: white;
-            padding: 20px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,.05);
-        }
-        
-        .search-bar {
-            margin-bottom: 20px;
-        }
-        
-        .toolbar {
-            margin-bottom: 20px;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-        
-        .user-info i {
-            margin-right: 8px;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
     <div id="app" v-cloak>
@@ -138,7 +44,7 @@
                     
                     <el-sub-menu index="2" v-if="userRole === 'park' || userRole === 'admin'">
                         <template #title>
-                            <el-icon><OfficeBuilding /></el-icon>
+                            <el-icon><Setting /></el-icon>
                             <span>车场层</span>
                         </template>
                         <el-menu-item index="2-1">车场信息</el-menu-item>
@@ -156,119 +62,19 @@
             <!-- 内容区 -->
             <div class="content">
                 <!-- 车场管理 -->
-                <div v-if="activeMenu === '1-1'">
-                    <div class="page-header">
-                        <h2>车场管理</h2>
-                        <p>管理所有车场信息，支持增删改查、续费、下载功能</p>
-                    </div>
-                    <div class="page-content">
-                        <div class="search-bar">
-                            <el-form :inline="true" :model="parkSearchForm">
-                                <el-form-item label="车场名称">
-                                    <el-input v-model="parkSearchForm.name" placeholder="请输入车场名称" clearable />
-                                </el-form-item>
-                                <el-form-item label="车场编号">
-                                    <el-input v-model="parkSearchForm.code" placeholder="请输入车场编号" clearable />
-                                </el-form-item>
-                                <el-form-item>
-                                    <el-button type="primary" @click="searchParks">查询</el-button>
-                                    <el-button @click="resetParkSearch">重置</el-button>
-                                </el-form-item>
-                            </el-form>
-                        </div>
-                        
-                        <div class="toolbar">
-                            <el-button type="primary" @click="showParkDialog('add')">新增车场</el-button>
-                        </div>
-                        
-                        <el-table :data="parkList" border stripe style="width: 100%">
-                            <el-table-column type="index" label="序号" width="60" align="center" />
-                            <el-table-column prop="name" label="车场名称" min-width="120" />
-                            <el-table-column prop="code" label="车场编号" min-width="120" />
-                            <el-table-column prop="secretKey" label="密钥" min-width="150" show-overflow-tooltip />
-                            <el-table-column prop="createdAt" label="创建时间" min-width="150" />
-                            <el-table-column prop="startTime" label="开始时间" min-width="120" />
-                            <el-table-column prop="endTime" label="结束时间" min-width="120" />
-                            <el-table-column prop="province" label="省" width="80" />
-                            <el-table-column prop="city" label="市" width="80" />
-                            <el-table-column prop="district" label="区" width="80" />
-                            <el-table-column prop="industry" label="行业" min-width="100" />
-                            <el-table-column prop="contact" label="联系人" width="100" />
-                            <el-table-column prop="contactPhone" label="联系电话" min-width="120" />
-                            <el-table-column label="操作" width="280" fixed="right" align="center">
-                                <template #default="scope">
-                                    <el-button type="primary" size="small" @click="showParkDialog('edit', scope.row)">编辑</el-button>
-                                    <el-button type="success" size="small" @click="showRenewDialog(scope.row)">续费</el-button>
-                                    <el-button type="info" size="small" @click="downloadParkInfo(scope.row)">下载</el-button>
-                                    <el-button type="danger" size="small" @click="deletePark(scope.row)">删除</el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                        
-                        <el-pagination
-                            v-model:current-page="parkPagination.page"
-                            v-model:page-size="parkPagination.pageSize"
-                            :total="parkPagination.total"
-                            :page-sizes="[10, 20, 50, 100]"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            @size-change="loadParks"
-                            @current-change="loadParks"
-                            style="margin-top: 20px; justify-content: flex-end;"
-                        />
-                    </div>
-                </div>
+                <park-management v-if="activeMenu === '1-1'"></park-management>
                 
                 <!-- 续费记录 -->
-                <div v-if="activeMenu === '1-2'">
-                    <div class="page-header">
-                        <h2>续费记录</h2>
-                        <p>查看所有车场的续费记录</p>
-                    </div>
-                    <div class="page-content">
-                        <div class="search-bar">
-                            <el-form :inline="true" :model="renewalSearchForm">
-                                <el-form-item label="车场名称">
-                                    <el-input v-model="renewalSearchForm.parkName" placeholder="请输入车场名称" clearable />
-                                </el-form-item>
-                                <el-form-item label="车场编号">
-                                    <el-input v-model="renewalSearchForm.parkCode" placeholder="请输入车场编号" clearable />
-                                </el-form-item>
-                                <el-form-item>
-                                    <el-button type="primary" @click="searchRenewals">查询</el-button>
-                                    <el-button @click="resetRenewalSearch">重置</el-button>
-                                </el-form-item>
-                            </el-form>
-                        </div>
-                        
-                        <el-table :data="renewalList" border stripe style="width: 100%">
-                            <el-table-column type="index" label="序号" width="60" align="center" />
-                            <el-table-column prop="parkName" label="车场名称" min-width="120" />
-                            <el-table-column prop="parkCode" label="车场编号" min-width="120" />
-                            <el-table-column prop="oldEndTime" label="续费前结束时间" min-width="150" />
-                            <el-table-column prop="newEndTime" label="续费后结束时间" min-width="150" />
-                            <el-table-column prop="province" label="省" width="80" />
-                            <el-table-column prop="duration" label="续费时长(月)" width="120" align="center" />
-                            <el-table-column prop="renewalTime" label="续费时间" min-width="150" />
-                        </el-table>
-                        
-                        <el-pagination
-                            v-model:current-page="renewalPagination.page"
-                            v-model:page-size="renewalPagination.pageSize"
-                            :total="renewalPagination.total"
-                            :page-sizes="[10, 20, 50, 100]"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            @size-change="loadRenewals"
-                            @current-change="loadRenewals"
-                            style="margin-top: 20px; justify-content: flex-end;"
-                        />
-                    </div>
-                </div>
+                <renewal-records v-if="activeMenu === '1-2'"></renewal-records>
                 
                 <!-- 欢迎页 -->
-                <div v-if="!activeMenu || activeMenu === 'welcome'" style="text-align: center; padding-top: 100px;">
-                    <h2 style="font-size: 32px; color: #409EFF; margin-bottom: 20px;">欢迎使用台账管理系统</h2>
-                    <p style="font-size: 16px; color: #666;">请从左侧菜单选择功能模块</p>
+                <div v-if="!activeMenu || activeMenu === 'welcome'" class="welcome-page">
+                    <h2>欢迎使用台账管理系统</h2>
+                    <p>请从左侧菜单选择功能模块</p>
                 </div>
+                
+                <!-- 车场信息 -->
+                <park-info v-if="activeMenu === '2-1'"></park-info>
                 
                 <!-- 公司管理 -->
                 <company-management v-if="activeMenu === '2-2'"></company-management>
@@ -277,92 +83,20 @@
                 <external-vehicle-management v-if="activeMenu === '2-3'"></external-vehicle-management>
                 
                 <!-- 其他模块占位 -->
-                <div v-if="activeMenu && !['1-1', '1-2', '2-2', '2-3'].includes(activeMenu)" style="text-align: center; padding-top: 100px;">
-                    <h2 style="font-size: 24px; color: #909399; margin-bottom: 20px;">{{ currentPageTitle }}</h2>
-                    <p style="font-size: 14px; color: #999;">功能开发中...</p>
+                <div v-if="activeMenu && !['1-1', '1-2', '2-1', '2-2', '2-3'].includes(activeMenu)" class="placeholder-page">
+                    <h2>{{ currentPageTitle }}</h2>
+                    <p>功能开发中...</p>
                 </div>
             </div>
         </div>
-        
-        <!-- 车场新增/编辑对话框 -->
-        <el-dialog
-            v-model="parkDialogVisible"
-            :title="parkDialogTitle"
-            width="700px"
-            @close="resetParkForm"
-        >
-            <el-form :model="parkForm" :rules="parkRules" ref="parkFormRef" label-width="140px">
-                <el-form-item label="车场名称" prop="name">
-                    <el-input v-model="parkForm.name" placeholder="请输入车场名称" />
-                </el-form-item>
-                <el-form-item label="车场编号" prop="code">
-                    <el-input v-model="parkForm.code" placeholder="请输入车场编号" :disabled="parkDialogMode === 'edit'" />
-                </el-form-item>
-                <el-form-item label="省" prop="province">
-                    <el-input v-model="parkForm.province" placeholder="请输入省份" />
-                </el-form-item>
-                <el-form-item label="市" prop="city">
-                    <el-input v-model="parkForm.city" placeholder="请输入城市" />
-                </el-form-item>
-                <el-form-item label="区" prop="district">
-                    <el-input v-model="parkForm.district" placeholder="请输入区县" />
-                </el-form-item>
-                <el-form-item label="行业" prop="industry">
-                    <el-input v-model="parkForm.industry" placeholder="请输入行业" />
-                </el-form-item>
-                <el-form-item label="联系人" prop="contact">
-                    <el-input v-model="parkForm.contact" placeholder="请输入联系人" />
-                </el-form-item>
-                <el-form-item label="联系电话" prop="contactPhone">
-                    <el-input v-model="parkForm.contactPhone" placeholder="请输入联系电话" />
-                </el-form-item>
-                <el-form-item label="开始时间" prop="startTime" v-if="parkDialogMode === 'add'">
-                    <el-date-picker v-model="parkForm.startTime" type="date" placeholder="选择开始时间" style="width: 100%;" />
-                </el-form-item>
-                <el-form-item label="结束时间" prop="endTime" v-if="parkDialogMode === 'add'">
-                    <el-date-picker v-model="parkForm.endTime" type="date" placeholder="选择结束时间" style="width: 100%;" />
-                </el-form-item>
-                <el-form-item label="备注" prop="remark">
-                    <el-input v-model="parkForm.remark" type="textarea" :rows="3" placeholder="请输入备注" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-                <el-button @click="parkDialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="savePark">确定</el-button>
-            </template>
-        </el-dialog>
-        
-        <!-- 续费对话框 -->
-        <el-dialog
-            v-model="renewDialogVisible"
-            title="车场续费"
-            width="500px"
-            @close="resetRenewForm"
-        >
-            <el-form :model="renewForm" ref="renewFormRef" label-width="140px">
-                <el-form-item label="车场名称">
-                    <el-input v-model="renewForm.parkName" disabled />
-                </el-form-item>
-                <el-form-item label="续费前结束时间">
-                    <el-input v-model="renewForm.oldEndTime" disabled />
-                </el-form-item>
-                <el-form-item label="续费时长(月)" prop="duration">
-                    <el-input-number v-model="renewForm.duration" :min="1" :max="120" />
-                </el-form-item>
-                <el-form-item label="续费后结束时间">
-                    <el-input v-model="computedNewEndTime" disabled />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-                <el-button @click="renewDialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="saveRenew">确定</el-button>
-            </template>
-        </el-dialog>
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/element-plus"></script>
     <script src="https://unpkg.com/@element-plus/icons-vue"></script>
+    <script src="./js/park-management.js"></script>
+    <script src="./js/renewal-records.js"></script>
+    <script src="./js/park-info.js"></script>
     <script src="./js/components.js"></script>
     <script src="./js/app.js"></script>
 </body>
