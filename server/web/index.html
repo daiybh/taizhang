@@ -54,7 +54,7 @@
                         <el-menu-item v-for="item in menuItems.admin" :key="item.index" :index="item.index">{{ item.label }}</el-menu-item>
                     </el-sub-menu>
                     
-                    <el-sub-menu index="2" v-if="userRole === 'park'">
+                    <el-sub-menu index="2" v-if="userRole === 'park' || userRole === 'admin'">
                         <template #title>
                             <el-icon><Setting /></el-icon>
                             <span>车场层</span>
@@ -69,29 +69,19 @@
             
             <!-- 内容区 -->
             <div class="content">
-                <!-- 车场管理 -->
-                <park-management v-if="activeMenu === '1-1'"></park-management>
-                
-                <!-- 续费记录 -->
-                <renewal-records v-if="activeMenu === '1-2'"></renewal-records>
-                
+                <!-- 动态渲染已注册组件（由 app.js 的 menuItems.component 指定） -->
+                <template v-for="item in [...menuItems.admin, ...menuItems.park]" :key="item.index">
+                    <component v-if="item.component && activeMenu === item.index" :is="item.component" :title="item.label" :item-index="item.index"></component>
+                </template>
+
                 <!-- 欢迎页 -->
                 <div v-if="!activeMenu || activeMenu === 'welcome'" class="welcome-page">
                     <h2>欢迎使用台账管理系统</h2>
                     <p>请从左侧菜单选择功能模块</p>
                 </div>
-                
-                <!-- 车场信息 -->
-                <park-info v-if="activeMenu === '2-1'"></park-info>
-                
-                <!-- 公司管理 -->
-                <company-management v-if="activeMenu === '2-2'"></company-management>
-                
-                <!-- 厂外运输车辆 -->
-                <external-vehicle-management v-if="activeMenu === '2-3'"></external-vehicle-management>
-                
-                <!-- 其他模块占位 -->
-                <div v-if="activeMenu && !['1-1', '1-2', '2-1', '2-2', '2-3'].includes(activeMenu)" class="placeholder-page">
+
+                <!-- 其他模块占位（当选中项没有对应组件时显示占位） -->
+                <div v-if="activeMenu && ![...menuItems.admin, ...menuItems.park].some(i => i.index === activeMenu && i.component)" class="placeholder-page">
                     <h2>{{ currentPageTitle }}</h2>
                     <p>功能开发中...</p>
                 </div>
@@ -104,6 +94,9 @@
     <script src="https://unpkg.com/@element-plus/icons-vue"></script>
     <script src="./js/components/company-form-dialog.js"></script>
     <script src="./js/components/company-index.js"></script>
+
+    <script src="./js/components/placeholder.js"></script>
+    <!-- menu-items.json 由 app.js 异步加载 -->
 
     <script src="./js/pages/park-management/form-dialog.js"></script>
     <script src="./js/pages/park-management/renew-dialog.js"></script>
