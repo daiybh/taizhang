@@ -33,7 +33,20 @@ const ParkInfo = {
     mounted() { this.loadPark(); },
 
     methods: {
-        async loadPark() { try { const data = await request('/parks/me'); if (data.code === 0) this.park = data.data || {}; } catch (error) { console.error('Load park info failed:', error); } },
+        async loadPark() {
+            try {
+                const parkId = sessionStorage.getItem('parkId');
+                let data;
+                if (parkId) {
+                    data = await request(`/parks/${parkId}`);
+                } else {
+                    data = await request('/parks/me');
+                }
+                if (data && data.code === 0) this.park = data.data || {};
+            } catch (error) {
+                console.error('Load park info failed:', error);
+            }
+        },
         async toggleEdit() { if (this.isEditing) { try { const payload = { name: this.park.name, contact_name: this.park.contact_name, contact_phone: this.park.contact_phone }; const result = await request(`/parks/${this.park.id}`, { method: 'PUT', body: JSON.stringify(payload) }); if (result.code === 0) { ElMessage.success('保存成功'); this.isEditing = false; } } catch (error) { console.error('Save park failed:', error); } } else { this.isEditing = true; } }
     }
 };

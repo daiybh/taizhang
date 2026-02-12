@@ -182,7 +182,27 @@
                                     sessionStorage.setItem('username', this.loginForm.username);
                                     sessionStorage.setItem('parkCode', this.loginForm.parkCode);
                                     sessionStorage.setItem('authenticated', '1');
-                                    window.location.href = '/web/index.html';
+
+                                    // 查询车场信息以获取当前车场 ID 并存储
+                                    (async () => {
+                                        try {
+                                            const params = new URLSearchParams({ code: this.loginForm.parkCode, page: 1, pageSize: 1 });
+                                            const resp = await fetch('/api/v1/parks?' + params.toString(), { headers: { 'Content-Type': 'application/json' } });
+                                            if (resp.ok) {
+                                                const json = await resp.json();
+                                                const list = json.data?.list || [];
+                                                if (list.length > 0) {
+                                                    const park = list[0];
+                                                    sessionStorage.setItem('parkId', String(park.id));
+                                                    sessionStorage.setItem('parkName', park.name || '');
+                                                }
+                                            }
+                                        } catch (e) {
+                                            console.error('Fetch park id failed:', e);
+                                        } finally {
+                                            window.location.href = '/web/index.html';
+                                        }
+                                    })();
                                 } else {
                                     ElMessage.error('请填写完整信息');
                                 }
