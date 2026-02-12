@@ -95,7 +95,8 @@ const NonroadManagement = {
 
   data() {
     return {
-      searchForm: { name: '', audit_status: '', dispatch_status: '' },
+      // 使用后端期望的查询参数名称：license_plate / environmental_code / dispatch_status / emission_standard
+      searchForm: { license_plate: '', environmental_code: '', dispatch_status: '', emission_standard: '' },
       list: [],
       pagination: { page: 1, pageSize: 10, total: 0 }
     };
@@ -106,8 +107,8 @@ const NonroadManagement = {
   methods: {
     async loadList() {
       try {
-        const params = new URLSearchParams({ page: this.pagination.page, pageSize: this.pagination.pageSize, name: this.searchForm.name, audit_status: this.searchForm.audit_status, dispatch_status: this.searchForm.dispatch_status });
-        const data = await request(`/nonroad-machines?${params}`);
+        const params = new URLSearchParams({ page: this.pagination.page, page_size: this.pagination.pageSize, license_plate: this.searchForm.license_plate, environmental_code: this.searchForm.environmental_code, dispatch_status: this.searchForm.dispatch_status, emission_standard: this.searchForm.emission_standard });
+        const data = await request(`/non-road?${params}`);
         if (data && data.code === 0) { this.list = data.data?.list || []; this.pagination.total = data.data?.total || 0; }
       } catch (e) { console.error('Load nonroad machines failed', e); }
     },
