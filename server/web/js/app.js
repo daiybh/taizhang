@@ -51,25 +51,33 @@ app = createApp({
             userRole: sessionStorage.getItem('userRole') || 'admin', // admin: 管理层, park: 车场层
 
             // 当前激活的菜单
-            activeMenu: 'welcome'
+            activeMenu: 'welcome',
+
+            // 菜单项统一定义，供侧边栏渲染与标题映射使用
+            menuItems: {
+                admin: [
+                    { index: '1-1', label: '车场管理' },
+                    { index: '1-2', label: '续费记录' }
+                ],
+                park: [
+                    { index: '2-1', label: '车场信息' },
+                    { index: '2-2', label: '公司管理' },
+                    { index: '2-3', label: '厂外运输车辆' },
+                    { index: '2-4', label: '厂内运输车辆' },
+                    { index: '2-5', label: '非道路移动机械' },
+                    { index: '2-6', label: '二维码管理' },
+                    { index: '2-7', label: '用户权限' },
+                    { index: '2-8', label: '部门管理' }
+                ]
+            }
         };
     },
     
     computed: {
         currentPageTitle() {
-            const menuMap = {
-                '1-1': '车场管理',
-                '1-2': '续费记录',
-                '2-1': '车场信息',
-                '2-2': '公司管理',
-                '2-3': '厂外运输车辆',
-                '2-4': '厂内运输车辆',
-                '2-5': '非道路移动机械',
-                '2-6': '二维码管理',
-                '2-7': '用户权限',
-                '2-8': '部门管理'
-            };
-            return menuMap[this.activeMenu] || '';
+            const all = [...this.menuItems.admin, ...this.menuItems.park];
+            const found = all.find(i => i.index === this.activeMenu);
+            return found ? found.label : '';
         }
     },
     

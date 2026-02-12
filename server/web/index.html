@@ -51,8 +51,7 @@
                             <el-icon><Setting /></el-icon>
                             <span>管理层</span>
                         </template>
-                        <el-menu-item index="1-1">车场管理</el-menu-item>
-                        <el-menu-item index="1-2">续费记录</el-menu-item>
+                        <el-menu-item v-for="item in menuItems.admin" :key="item.index" :index="item.index">{{ item.label }}</el-menu-item>
                     </el-sub-menu>
                     
                     <el-sub-menu index="2" v-if="userRole === 'park'">
@@ -60,14 +59,7 @@
                             <el-icon><Setting /></el-icon>
                             <span>车场层</span>
                         </template>
-                        <el-menu-item index="2-1">车场信息</el-menu-item>
-                        <el-menu-item index="2-2">公司管理</el-menu-item>
-                        <el-menu-item index="2-3">厂外运输车辆</el-menu-item>
-                        <el-menu-item index="2-4">厂内运输车辆</el-menu-item>
-                        <el-menu-item index="2-5">非道路移动机械</el-menu-item>
-                        <el-menu-item index="2-6">二维码管理</el-menu-item>
-                        <el-menu-item index="2-7">用户权限</el-menu-item>
-                        <el-menu-item index="2-8">部门管理</el-menu-item>
+                        <el-menu-item v-for="item in menuItems.park" :key="item.index" :index="item.index">{{ item.label }}</el-menu-item>
                     </el-sub-menu>
                 </el-menu>
             </div>
