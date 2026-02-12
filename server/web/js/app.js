@@ -55,7 +55,7 @@ async function initApp() {
 
     // 本地覆盖支持（便于快速迭代，保存在 localStorage）
     let override = null;
-    try { override = JSON.parse(localStorage.getItem('menuItemsOverride') || 'null'); } catch (e) { override = null; }
+   // try { override = JSON.parse(localStorage.getItem('menuItemsOverride') || 'null'); } catch (e) { override = null; }
 
     const defaultMenu = {
         admin: [
