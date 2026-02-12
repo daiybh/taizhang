@@ -1,0 +1,58 @@
+# 二进制文件
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+main
+taizhang-server
+
+# 测试相关
+*.test
+*.out
+coverage.txt
+coverage.html
+
+# 依赖和模块
+vendor/
+
+# IDE 和编辑器
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# 环境变量和配置
+.env
+.env.local
+.env.*.local
+config/config.yaml
+
+# 日志文件
+*.log
+logs/
+
+# 临时文件
+tmp/
+temp/
+*.tmp
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+
+# 密钥和证书
+*.key
+*.pem
+*.crt
+*.cer
+*.p12
+*.pfx
+
+# 构建输出
+dist/
+build/
+bin/

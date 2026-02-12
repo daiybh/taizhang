@@ -1,0 +1,19 @@
+
+{
+  "pages": [
+    "pages/index/index",
+    "pages/scan/scan",
+    "pages/vehicle/vehicle",
+    "pages/vehicle/external/external",
+    "pages/vehicle/internal/internal",
+    "pages/vehicle/nonroad/nonroad"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "台账系统",
+    "navigationBarTextStyle": "black"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

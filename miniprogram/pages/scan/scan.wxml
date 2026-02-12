@@ -1,0 +1,124 @@
+
+<!--scan.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">扫码登记</text>
+  </view>
+
+  <view class="content">
+    <view class="park-info">
+      <text class="label">车场名称：</text>
+      <text class="value">{{parkName}}</text>
+    </view>
+
+    <view class="company-section" wx:if="{{companyEnabled}}">
+      <view class="label">公司名称</view>
+      <picker bindchange="bindCompanyChange" value="{{companyIndex}}" range="{{companies}}" range-key="name">
+        <view class="picker">
+          {{companies[companyIndex].name || '请选择公司'}}
+        </view>
+      </picker>
+    </view>
+
+    <button class="btn-primary" bindtap="chooseImage">上传行驶证照片</button>
+
+    <view class="form-section" wx:if="{{showForm}}">
+      <view class="form-item">
+        <text class="form-label">车牌号码</text>
+        <input class="form-input" value="{{vehicle.licensePlate}}" disabled />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">车牌颜色</text>
+        <input class="form-input" value="{{vehicle.plateColor}}" disabled />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">车辆类型</text>
+        <input class="form-input" value="{{vehicle.vehicleType}}" disabled />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">车辆识别代号(VIN)</text>
+        <input class="form-input" value="{{vehicle.vin}}" disabled />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">注册日期</text>
+        <input class="form-input" value="{{vehicle.registerDate}}" disabled />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">发证日期</text>
+        <input class="form-input" value="{{vehicle.issueDate}}" disabled />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">品牌型号</text>
+        <input class="form-input" value="{{vehicle.brandModel}}" disabled />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">使用性质</text>
+        <input class="form-input" value="{{vehicle.usageNature}}" disabled />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">所有人</text>
+        <input class="form-input" value="{{vehicle.owner}}" disabled />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">住址</text>
+        <input class="form-input" value="{{vehicle.address}}" disabled />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">发动机号码</text>
+        <input class="form-input" value="{{vehicle.engineNumber}}" bindinput="onEngineNumberInput" />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">发动机型号</text>
+        <input class="form-input" value="{{vehicle.engineModel}}" disabled />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">发动机制造商</text>
+        <input class="form-input" value="{{vehicle.engineManufacturer}}" bindinput="onEngineManufacturerInput" />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">排放阶段</text>
+        <input class="form-input" value="{{vehicle.emissionStandard}}" disabled />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">燃油类型</text>
+        <input class="form-input" value="{{vehicle.fuelType}}" disabled />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">核定载质量(kg)</text>
+        <input class="form-input" type="digit" value="{{vehicle.approvedLoadMass}}" bindinput="onApprovedLoadMassInput" />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">准牵引质量(kg)</text>
+        <input class="form-input" type="digit" value="{{vehicle.maxTowingMass}}" bindinput="onMaxTowingMassInput" />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">手机号码</text>
+        <input class="form-input" type="number" value="{{vehicle.phone}}" bindinput="onPhoneInput" />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">安装OBD</text>
+        <switch checked="{{vehicle.isOBDEnabled}}" bindchange="onOBDSwitchChange" />
+      </view>
+
+      <button class="btn-primary" bindtap="submitVehicle">提交</button>
+    </view>
+  </view>
+</view>

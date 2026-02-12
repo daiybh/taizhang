@@ -1,0 +1,39 @@
+
+<!--vehicle.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">我的车辆</text>
+  </view>
+
+  <view class="tabs">
+    <view class="tab {{activeTab === 'external' ? 'active' : ''}}" bindtap="switchTab" data-tab="external">
+      厂外运输车辆
+    </view>
+    <view class="tab {{activeTab === 'internal' ? 'active' : ''}}" bindtap="switchTab" data-tab="internal">
+      厂内运输车辆
+    </view>
+    <view class="tab {{activeTab === 'nonroad' ? 'active' : ''}}" bindtap="switchTab" data-tab="nonroad">
+      非道路移动机械
+    </view>
+  </view>
+
+  <view class="content">
+    <view class="vehicle-list">
+      <view class="vehicle-item" wx:for="{{vehicles}}" wx:key="id" bindtap="viewVehicle" data-id="{{item.id}}">
+        <view class="vehicle-info">
+          <text class="license-plate">{{item.licensePlate}}</text>
+          <text class="vehicle-type">{{item.vehicleType}}</text>
+        </view>
+        <view class="vehicle-status">
+          <text class="status {{item.auditStatus === 'audited' ? 'success' : 'pending'}}">
+            {{item.auditStatus === 'audited' ? '已审核' : '未审核'}}
+          </text>
+        </view>
+      </view>
+
+      <view class="empty" wx:if="{{vehicles.length === 0}}">
+        <text>暂无车辆信息</text>
+      </view>
+    </view>
+  </view>
+</view>

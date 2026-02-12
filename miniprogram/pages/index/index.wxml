@@ -1,0 +1,19 @@
+
+<!--index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">台账系统</text>
+  </view>
+
+  <view class="content">
+    <view class="menu-item" bindtap="scanQRCode">
+      <image class="icon" src="/images/scan.png"></image>
+      <text>扫码登记</text>
+    </view>
+
+    <view class="menu-item" bindtap="viewVehicles">
+      <image class="icon" src="/images/vehicle.png"></image>
+      <text>我的车辆</text>
+    </view>
+  </view>
+</view>
