@@ -68,7 +68,13 @@ async function initApp() {
             { index: '2-3', label: '厂外运输车辆', component: 'external-vehicle-management' },
             { index: '2-4', label: '厂内运输车辆', component: 'internal-vehicle-management' },
             { index: '2-5', label: '非道路移动机械', component: 'nonroad-management' },
-            { index: '2-6', label: '二维码管理', component: 'placeholder' },
+            {
+                index: '2-6', label: '二维码管理', children: [
+                    { index: '2-6-1', label: '厂外运输车辆二维码', component: 'qrcode-external' },
+                    { index: '2-6-2', label: '厂内运输车辆二维码', component: 'qrcode-internal' },
+                    { index: '2-6-3', label: '非道路移动机械二维码', component: 'qrcode-nonroad' }
+                ]
+            },
             { index: '2-7', label: '用户权限', component: 'placeholder' },
             { index: '2-8', label: '部门管理', component: 'placeholder' }
         ]
@@ -98,10 +104,16 @@ async function initApp() {
     try {
         const allItems = [...(menuItemsInitial.admin || []), ...(menuItemsInitial.park || [])];
         for (const it of allItems) {
-                console.log(`Registering component for menu item ${it.label}: ${it.component}`);
-            if (it && it.component && window.__component_registry__[it.component]) {
-                console.log(`aaaa Registering component for menu item ${it.label}: ${it.component}`);
-                componentsToRegister[it.component] = window.__component_registry__[it.component];
+            if (it && Array.isArray(it.children)) {
+                for (const ch of it.children) {
+                    if (ch && ch.component && window.__component_registry__[ch.component]) {
+                        componentsToRegister[ch.component] = window.__component_registry__[ch.component];
+                    }
+                }
+            } else {
+                if (it && it.component && window.__component_registry__[it.component]) {
+                    componentsToRegister[it.component] = window.__component_registry__[it.component];
+                }
             }
         }
     } catch (e) {

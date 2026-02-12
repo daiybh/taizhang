@@ -59,7 +59,15 @@
                             <el-icon><Setting /></el-icon>
                             <span>车场层</span>
                         </template>
-                        <el-menu-item v-for="item in menuItems.park" :key="item.index" :index="item.index">{{ item.label }}</el-menu-item>
+                        <template v-for="item in menuItems.park" :key="item.index">
+                            <el-sub-menu v-if="item.children" :index="item.index">
+                                <template #title>
+                                    <span>{{ item.label }}</span>
+                                </template>
+                                <el-menu-item v-for="child in item.children" :key="child.index" :index="child.index">{{ child.label }}</el-menu-item>
+                            </el-sub-menu>
+                            <el-menu-item v-else :key="item.index" :index="item.index">{{ item.label }}</el-menu-item>
+                        </template>
                     </el-sub-menu>
                 </el-menu>
                  <div class="sidebar-footer" style="padding:16px; text-align:center;">
@@ -70,8 +78,8 @@
             
             <!-- 内容区 -->
             <div class="content">
-                <!-- 动态渲染已注册组件（由 app.js 的 menuItems.component 指定） -->
-                <template v-for="item in [...menuItems.admin, ...menuItems.park]" :key="item.index">
+                <!-- 动态渲染已注册组件（支持子目录项） -->
+                <template v-for="item in ([...menuItems.admin, ...menuItems.park].flatMap(i => i.children ? i.children : i))" :key="item.index">
                     <component v-if="item.component && activeMenu === item.index" :is="item.component" :title="item.label" :item-index="item.index"></component>
                 </template>
 
@@ -82,7 +90,7 @@
                 </div>
 
                 <!-- 其他模块占位（当选中项没有对应组件时显示占位） -->
-                <div v-if="activeMenu && ![...menuItems.admin, ...menuItems.park].some(i => i.index === activeMenu && i.component)" class="placeholder-page">
+                <div v-if="activeMenu && !([ ...menuItems.admin, ...menuItems.park ].flatMap(i => i.children ? i.children : i).some(i => i.index === activeMenu && i.component))" class="placeholder-page">
                     <h2>{{ currentPageTitle }}</h2>
                     <p>功能开发中...</p>
                 </div>
