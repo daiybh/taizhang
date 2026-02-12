@@ -1,10 +1,7 @@
 const { createApp } = Vue;
 const { ElMessage, ElMessageBox } = ElementPlus;
 
-// 如果没有登录信息则重定向到登录页（明确使用 /web/login.html）
-if (!sessionStorage.getItem('username') && location.pathname !== '/web/login.html') {
-    window.location.href = '/web/login.html';
-}
+// 重定向检查由页面头部的早期脚本负责（index.html 中使用 replace）
 
 // API 基础路径
 const API_BASE = '/api/v1';
@@ -89,10 +86,10 @@ app = createApp({
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                // 清除登录信息并跳转到登录页
+                // 清除登录信息并跳转到登录页（使用 replace 以不留历史记录）
                 try { sessionStorage.removeItem('username'); sessionStorage.removeItem('userRole'); sessionStorage.removeItem('parkCode'); sessionStorage.removeItem('authenticated'); } catch (e) {}
                 ElMessage.success('退出成功');
-                window.location.href = '/web/login.html';
+                window.location.replace('/web/login.html');
             }).catch(() => {});
         }
     },
