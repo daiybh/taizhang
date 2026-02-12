@@ -83,6 +83,7 @@ async function initApp() {
         'park-info': ParkInfo,
         'company-management': CompanyManagement,
         'external-vehicle-management': ExternalVehicleManagement,
+        'internal-vehicle-management': InternalVehicleManagement,
         'placeholder': Placeholder
     };
 

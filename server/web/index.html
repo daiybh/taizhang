@@ -62,10 +62,11 @@
                         <el-menu-item v-for="item in menuItems.park" :key="item.index" :index="item.index">{{ item.label }}</el-menu-item>
                     </el-sub-menu>
                 </el-menu>
-            </div>
-            <div class="sidebar-footer" style="padding:16px; text-align:center;">
+                 <div class="sidebar-footer" style="padding:16px; text-align:center;">
                 <el-button type="danger" @click="handleLogout">退出登录</el-button>
             </div>
+            </div>
+           
             
             <!-- 内容区 -->
             <div class="content">
@@ -104,6 +105,7 @@
 
     <script src="./js/pages/renewal-records/index.js"></script>
     <script src="./js/pages/park-info/index.js"></script>
+    <script src="./js/pages/internal-vehicle/index.js"></script>
     <script src="./js/pages/external-vehicle/index.js"></script>
     <script src="./js/app.js"></script>
 </body>
