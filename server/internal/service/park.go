@@ -4,13 +4,10 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
-	"strings"
 	"time"
 
 	"taizhang-server/internal/model"
 	"taizhang-server/internal/repository"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 type ParkService struct {
@@ -204,35 +201,26 @@ func generateSecretKey() (string, error) {
 	return hex.EncodeToString(bytes), nil
 }
 
-// generateLoginCredentials 生成5位随机账号和bcrypt加密的密码
+// generateLoginCredentials 生成5位数字账号和密码
 func generateLoginCredentials() (string, string, error) {
-	// 生成账号
+	// 生成5位数字账号（10000-99999）
 	accountBytes := make([]byte, 3)
 	if _, err := rand.Read(accountBytes); err != nil {
 		return "", "", err
 	}
-	account := strings.ToLower(hex.EncodeToString(accountBytes))[:5]
+	// 转换为5位数字
+	accountNum := 10000 + int(accountBytes[0])<<8 + int(accountBytes[1])
+	accountNum = accountNum%90000 + 10000 // 确保在 10000-99999 范围内
+	account := fmt.Sprintf("%05d", accountNum)
 
-	// 生成原始密码
-	passwordBytes := make([]byte, 5)
+	// 生成5位数字密码（10000-99999）
+	passwordBytes := make([]byte, 3)
 	if _, err := rand.Read(passwordBytes); err != nil {
 		return "", "", err
 	}
-	rawPassword := strings.ToUpper(hex.EncodeToString(passwordBytes))[:10]
+	passwordNum := 10000 + int(passwordBytes[0])<<8 + int(passwordBytes[1])
+	passwordNum = passwordNum%90000 + 10000 // 确保在 10000-99999 范围内
+	password := fmt.Sprintf("%05d", passwordNum)
 
-	// 使用 bcrypt 加密密码
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(rawPassword), bcrypt.DefaultCost)
-	if err != nil {
-		return "", "", err
-	}
-
-	// 注意：实际应用中需要将原始密码记录下来给用户，但这里只返回加密后的
-	// 在实际使用时，可能需要通过其他方式（如邮件、短信）将原始密码发送给用户
-	return account, string(hashedPassword), nil
-}
-
-// VerifyPassword 验证密码是否匹配
-func (s *ParkService) VerifyPassword(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
+	return account, password, nil
 }

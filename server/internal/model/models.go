@@ -20,7 +20,7 @@ type Park struct {
 	ContactName   string    `gorm:"type:varchar(50)" json:"contact_name"`
 	ContactPhone  string    `gorm:"type:varchar(20)" json:"contact_phone"`
 	LoginAccount  string    `gorm:"type:varchar(5);not null" json:"login_account"`
-	LoginPassword string    `gorm:"type:varchar(100);not null" json:"-"` // 密码不在API响应中返回
+	LoginPassword string    `gorm:"type:varchar(5);not null" json:"login_password"` // 5位数字密码（明文存储）
 	LoginURL      string    `gorm:"type:varchar(200)" json:"login_url"`
 	CreatedAt     time.Time `json:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at"`
