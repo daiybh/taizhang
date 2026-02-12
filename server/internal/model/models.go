@@ -41,8 +41,6 @@ type RenewalRecord struct {
 // Company 公司模型
 type Company struct {
 	ID           uint      `gorm:"primaryKey" json:"id"`
-	ParkID       uint      `gorm:"not null;index" json:"park_id"`
-	Park         Park      `gorm:"foreignKey:ParkID" json:"park,omitempty"`
 	Name         string    `gorm:"type:varchar(100);not null" json:"name"`
 	ContactName  string    `gorm:"type:varchar(50)" json:"contact_name"`
 	ContactPhone string    `gorm:"type:varchar(20)" json:"contact_phone"`

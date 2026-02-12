@@ -1,4 +1,3 @@
-
 package repository
 
 import (
@@ -30,11 +29,11 @@ func (r *CompanyRepository) GetByID(id uint) (*model.Company, error) {
 	return &company, nil
 }
 
-func (r *CompanyRepository) List(parkID uint, name string, page, pageSize int) ([]model.Company, int64, error) {
+func (r *CompanyRepository) List(name string, page, pageSize int) ([]model.Company, int64, error) {
 	var companies []model.Company
 	var total int64
 
-	query := r.DB.Model(&model.Company{}).Where("park_id = ?", parkID)
+	query := r.DB.Model(&model.Company{})
 
 	if name != "" {
 		query = query.Where("name LIKE ?", "%"+name+"%")

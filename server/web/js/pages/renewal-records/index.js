@@ -1,4 +1,4 @@
-// 续费记录组件
+// 续费记录组件（移动到 js/pages/renewal-records）
 const RenewalRecords = {
     template: `
         <div>
@@ -47,36 +47,15 @@ const RenewalRecords = {
         </div>
     `,
     
-    data() {
-        return {
-            searchForm: {
-                parkName: '',
-                parkCode: ''
-            },
-            list: [],
-            pagination: {
-                page: 1,
-                pageSize: 10,
-                total: 0
-            }
-        };
-    },
+    data() { return { searchForm: { parkName: '', parkCode: '' }, list: [], pagination: { page: 1, pageSize: 10, total: 0 } }; },
     
-    mounted() {
-        this.loadData();
-    },
+    mounted() { this.loadData(); },
     
     methods: {
         async loadData() {
             try {
-                const params = new URLSearchParams({
-                    page: this.pagination.page,
-                    pageSize: this.pagination.pageSize,
-                    ...this.searchForm
-                });
-                
+                const params = new URLSearchParams({ page: this.pagination.page, pageSize: this.pagination.pageSize, ...this.searchForm });
                 const data = await request(`/renewals?${params}`);
-                
                 if (data.code === 0) {
                     this.list = (data.data?.list || []).map(item => ({
                             ...item,
@@ -89,25 +68,10 @@ const RenewalRecords = {
                             created_at: formatDate(item.created_at)
                     }));
                     this.pagination.total = data.data?.total || 0;
-                } else {
-                    ElMessage.error(data.message || '加载失败');
-                }
-            } catch (error) {
-                console.error('Load renewals failed:', error);
-            }
+                } else { ElMessage.error(data.message || '加载失败'); }
+            } catch (error) { console.error('Load renewals failed:', error); }
         },
-        
-        search() {
-            this.pagination.page = 1;
-            this.loadData();
-        },
-        
-        resetSearch() {
-            this.searchForm = {
-                parkName: '',
-                parkCode: ''
-            };
-            this.search();
-        }
+        search() { this.pagination.page = 1; this.loadData(); },
+        resetSearch() { this.searchForm = { parkName: '', parkCode: '' }; this.search(); }
     }
 };

@@ -1,7 +1,8 @@
-
 package service
 
 import (
+	"errors"
+
 	"taizhang-server/internal/model"
 	"taizhang-server/internal/repository"
 )
@@ -17,6 +18,9 @@ func NewCompanyService(repo *repository.Repository) *CompanyService {
 }
 
 func (s *CompanyService) Create(company *model.Company) error {
+	if company == nil {
+		return errors.New("company is nil")
+	}
 	return s.repo.DB.Create(company).Error
 }
 
@@ -29,11 +33,11 @@ func (s *CompanyService) GetByID(id uint) (*model.Company, error) {
 	return &company, nil
 }
 
-func (s *CompanyService) List(parkID uint, name string, page, pageSize int) ([]model.Company, int64, error) {
+func (s *CompanyService) List(name string, page, pageSize int) ([]model.Company, int64, error) {
 	var companies []model.Company
 	var total int64
 
-	query := s.repo.DB.Model(&model.Company{}).Where("park_id = ?", parkID)
+	query := s.repo.DB.Model(&model.Company{})
 
 	if name != "" {
 		query = query.Where("name LIKE ?", "%"+name+"%")

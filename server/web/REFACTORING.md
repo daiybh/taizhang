@@ -22,7 +22,7 @@ web/
     ├── app.js          # 107 行 ⬇️ 减少 77%
     ├── park-management.js      # 337 行（新增）
     ├── renewal-records.js      # 109 行（新增）
-    └── components.js   # 413 行（现有）
+   └── js/park-management/   # 包含公司管理等模块（已模块化）
 ```
 
 ## 文件职责划分
@@ -49,7 +49,7 @@ web/
 - 组件注册
 - Element Plus 配置
 
-### 4. [js/park-management.js](js/park-management.js) - 337 行
+### 4. [js/pages/park-management/index.js](js/pages/park-management/index.js) - 337 行
 **职责：** 车场管理模块
 - 车场列表展示
 - 车场增删改查
@@ -61,7 +61,7 @@ web/
 - 续费记录查询
 - 续费记录展示
 
-### 6. [js/components.js](js/components.js) - 413 行
+### 6. [js/components/company-index.js](js/components/company-index.js) - 公司管理模块（原 components.js 的公司管理部分）
 **职责：** 其他业务组件
 - 公司管理组件
 - 厂外运输车辆组件

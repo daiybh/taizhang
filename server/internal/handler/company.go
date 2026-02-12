@@ -34,12 +34,11 @@ func (h *CompanyHandler) Create(c *gin.Context) {
 }
 
 func (h *CompanyHandler) List(c *gin.Context) {
-	parkID, _ := strconv.ParseUint(c.Query("parkId"), 10, 32)
 	name := c.Query("name")
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "10"))
 
-	companies, total, err := h.service.List(uint(parkID), name, page, pageSize)
+	companies, total, err := h.service.List(name, page, pageSize)
 	if err != nil {
 		response.InternalError(c, err.Error())
 		return
@@ -71,19 +70,40 @@ func (h *CompanyHandler) Update(c *gin.Context) {
 		return
 	}
 
-	var company model.Company
-	if err := c.ShouldBindJSON(&company); err != nil {
+	// 先读取现有记录，防止部分字段被覆盖
+	exist, err := h.service.GetByID(uint(id))
+	if err != nil {
+		response.NotFound(c, err.Error())
+		return
+	}
+
+	var payload model.Company
+	if err := c.ShouldBindJSON(&payload); err != nil {
 		response.BadRequest(c, err.Error())
 		return
 	}
 
-	company.ID = uint(id)
-	if err := h.service.Update(&company); err != nil {
+	// 合并修改字段
+	if payload.Name != "" {
+		exist.Name = payload.Name
+	}
+	if payload.Remark != "" {
+		exist.Remark = payload.Remark
+	}
+	// 更新联系信息
+	if payload.ContactName != "" {
+		exist.ContactName = payload.ContactName
+	}
+	if payload.ContactPhone != "" {
+		exist.ContactPhone = payload.ContactPhone
+	}
+
+	if err := h.service.Update(exist); err != nil {
 		response.InternalError(c, err.Error())
 		return
 	}
 
-	response.SuccessWithMessage(c, "更新成功", company)
+	response.SuccessWithMessage(c, "更新成功", exist)
 }
 
 func (h *CompanyHandler) Delete(c *gin.Context) {

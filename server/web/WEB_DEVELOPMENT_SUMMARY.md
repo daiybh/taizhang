@@ -60,7 +60,7 @@
 
 ### 3. 车场层功能
 
-#### 3.1 公司管理 ([components.js](server/web/js/components.js) - CompanyManagement)
+#### 3.1 公司管理 ([js/components/company-index.js](js/components/company-index.js) - CompanyManagement)
 
 **功能列表**:
 - ✅ 公司列表展示（支持分页）
@@ -77,7 +77,7 @@
 **业务关联**:
 当在厂外/厂内/非道路车辆管理中勾选"公司管理"时，车主扫码登记需要选择对应公司。
 
-#### 3.2 厂外运输车辆管理 ([components.js](server/web/js/components.js) - ExternalVehicleManagement)
+#### 3.2 厂外运输车辆管理 ([js/external-vehicle/index.js](js/external-vehicle/index.js) - ExternalVehicleManagement)
 
 **功能列表**:
 - ✅ 车辆列表展示（支持分页）
@@ -176,7 +176,7 @@ GET /api/v1/parks?page=1&pageSize=10&name=xxx
 
 // 示例：创建公司
 POST /api/v1/companies
-Body: { name: "公司名称", contact: "联系人", ... }
+Body: { name: "公司名称", contact_name: "联系人", contact_phone: "联系电话", ... }
 ```
 
 ## 访问方式

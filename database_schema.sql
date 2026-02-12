@@ -107,7 +107,6 @@ CREATE TABLE users (
 -- =====================================================
 CREATE TABLE companies (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '公司ID',
-  park_id BIGINT UNSIGNED NOT NULL COMMENT '车场ID',
   name VARCHAR(100) NOT NULL COMMENT '公司名称',
   contact_name VARCHAR(50) COMMENT '联系人名称',
   contact_phone VARCHAR(20) COMMENT '联系人电话',
@@ -115,8 +114,6 @@ CREATE TABLE companies (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   
-  FOREIGN KEY (park_id) REFERENCES parks(id) ON DELETE CASCADE,
-  INDEX idx_park_id (park_id),
   INDEX idx_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='公司表';
 

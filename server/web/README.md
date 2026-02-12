@@ -88,7 +88,7 @@ web/
 ├── login.html          # 登录页面
 └── js/
     ├── app.js          # 主应用逻辑
-    └── components.js   # 页面组件
+   └── js/pages/park-management/   # 页面模块（公司管理、车辆管理等）
 ```
 
 ## API 接口

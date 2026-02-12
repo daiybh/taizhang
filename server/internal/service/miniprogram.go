@@ -53,7 +53,8 @@ func (s *MiniProgramService) Scan(qrcode string) (*model.ScanResult, error) {
 	// 获取公司列表
 	var companies []model.Company
 	if companyEnabled {
-		err = s.repo.DB.Where("park_id = ?", parkID).Find(&companies).Error
+		// 公司为全局不再关联到 park，获取所有公司列表
+		err = s.repo.DB.Find(&companies).Error
 		if err != nil {
 			return nil, err
 		}

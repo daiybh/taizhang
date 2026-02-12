@@ -1,10 +1,10 @@
-// 车场管理组件
+// 车场管理组件（移动到 js/pages/park-management）
 const ParkManagement = {
     components: {
         ParkFormDialog,
         ParkRenewDialog
     },
-    
+
     template: `
         <div>
             <div class="page-header">

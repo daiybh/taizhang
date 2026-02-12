@@ -1,4 +1,4 @@
-// 车场表单对话框组件（新增/编辑）
+// 车场表单对话框组件（移动到 js/pages/park-management）
 const ParkFormDialog = {
     template: `
         <el-dialog
@@ -50,19 +50,9 @@ const ParkFormDialog = {
     `,
     
     props: {
-        visible: {
-            type: Boolean,
-            default: false
-        },
-        mode: {
-            type: String,
-            default: 'add', // 'add' 或 'edit'
-            validator: (value) => ['add', 'edit'].includes(value)
-        },
-        data: {
-            type: Object,
-            default: () => ({})
-        }
+        visible: { type: Boolean, default: false },
+        mode: { type: String, default: 'add', validator: (value) => ['add','edit'].includes(value) },
+        data: { type: Object, default: () => ({}) }
     },
     
     data() {
@@ -94,29 +84,14 @@ const ParkFormDialog = {
         };
     },
     
-    computed: {
-        title() {
-            return this.mode === 'add' ? '新增车场' : '编辑车场';
-        }
-    },
+    computed: { title() { return this.mode === 'add' ? '新增车场' : '编辑车场'; } },
     
-    watch: {
-        visible(val) {
-            if (val) {
-                this.initForm();
-            } else {
-                this.resetForm();
-            }
-        }
-    },
+    watch: { visible(val) { if (val) this.initForm(); else this.resetForm(); } },
     
     methods: {
         initForm() {
-            if (this.mode === 'edit' && this.data) {
-                // 编辑模式，填充数据
-                this.form = { ...this.data };
-            } else {
-                // 新增模式，设置默认时间
+            if (this.mode === 'edit' && this.data) this.form = { ...this.data };
+            else {
                 this.resetForm();
                 const now = new Date();
                 const oneYearLater = new Date();
@@ -124,74 +99,25 @@ const ParkFormDialog = {
                 this.form.start_time = now;
                 this.form.end_time = oneYearLater;
             }
-            // 清除验证
-            this.$nextTick(() => {
-                this.$refs.formRef?.clearValidate();
-            });
+            this.$nextTick(() => this.$refs.formRef?.clearValidate());
         },
-        
-        resetForm() {
-            this.form = {
-                id: null,
-                name: '',
-                code: '',
-                province: '',
-                city: '',
-                district: '',
-                industry: '',
-                contact_name: '',
-                contact_phone: '',
-                start_time: '',
-                end_time: '',
-                remark: ''
-            };
-            this.$refs.formRef?.resetFields();
-        },
-        
-        handleClose() {
-            this.$emit('update:visible', false);
-            this.$emit('close');
-        },
-        
+
+        resetForm() { this.form = { id: null, name: '', code: '', province: '', city: '', district: '', industry: '', contact_name: '', contact_phone: '', start_time: '', end_time: '', remark: '' }; this.$refs.formRef?.resetFields(); },
+
+        handleClose() { this.$emit('update:visible', false); this.$emit('close'); },
+
         async handleSubmit() {
             try {
                 await this.$refs.formRef.validate();
-                
                 this.loading = true;
-                
-                const data = {
-                    ...this.form,
-                    start_time: this.form.start_time ? new Date(this.form.start_time).toISOString() : '',
-                    end_time: this.form.end_time ? new Date(this.form.end_time).toISOString() : ''
-                };
-                
+                const data = { ...this.form, start_time: this.form.start_time ? new Date(this.form.start_time).toISOString() : '', end_time: this.form.end_time ? new Date(this.form.end_time).toISOString() : '' };
                 let result;
-                if (this.mode === 'add') {
-                    result = await request('/parks', {
-                        method: 'POST',
-                        body: JSON.stringify(data)
-                    });
-                } else {
-                    result = await request(`/parks/${this.form.id}`, {
-                        method: 'PUT',
-                        body: JSON.stringify(data)
-                    });
-                }
-                
-                if (result.code === 0) {
-                    ElMessage.success(this.mode === 'add' ? '新增成功' : '编辑成功');
-                    this.$emit('success');
-                    this.handleClose();
-                } else {
-                    ElMessage.error(result.message || '保存失败');
-                }
-            } catch (error) {
-                if (error.message) {
-                    console.error('Save park failed:', error);
-                }
-            } finally {
-                this.loading = false;
-            }
+                if (this.mode === 'add') result = await request('/parks', { method: 'POST', body: JSON.stringify(data) });
+                else result = await request(`/parks/${this.form.id}`, { method: 'PUT', body: JSON.stringify(data) });
+                if (result.code === 0) { ElMessage.success(this.mode === 'add' ? '新增成功' : '编辑成功'); this.$emit('success'); this.handleClose(); }
+                else ElMessage.error(result.message || '保存失败');
+            } catch (error) { console.error('Save park failed:', error); }
+            finally { this.loading = false; }
         }
     }
 };
