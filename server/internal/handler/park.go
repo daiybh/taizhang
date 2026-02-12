@@ -1,13 +1,14 @@
-
 package handler
 
 import (
 	"net/http"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
 	"taizhang-server/internal/model"
+	"taizhang-server/internal/response"
 	"taizhang-server/internal/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ParkHandler struct {
@@ -21,94 +22,89 @@ func NewParkHandler(service *service.ParkService) *ParkHandler {
 func (h *ParkHandler) Create(c *gin.Context) {
 	var park model.Park
 	if err := c.ShouldBindJSON(&park); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		response.BadRequest(c, err.Error())
 		return
 	}
 
 	if err := h.service.Create(&park); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		response.InternalError(c, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, park)
+	response.SuccessWithMessage(c, "新增成功", park)
 }
 
 func (h *ParkHandler) List(c *gin.Context) {
 	name := c.Query("name")
 	code := c.Query("code")
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
-	pageSize, _ := strconv.Atoi(c.DefaultQuery("page_size", "10"))
+	pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "10"))
 
 	parks, total, err := h.service.List(name, code, page, pageSize)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		response.InternalError(c, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"data":  parks,
-		"total": total,
-		"page":  page,
-		"page_size": pageSize,
-	})
+	response.SuccessPage(c, parks, int64(total), page, pageSize)
 }
 
 func (h *ParkHandler) Get(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		response.BadRequest(c, "invalid id")
 		return
 	}
 
 	park, err := h.service.GetByID(uint(id))
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		response.NotFound(c, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, park)
+	response.Success(c, park)
 }
 
 func (h *ParkHandler) Update(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		response.BadRequest(c, "invalid id")
 		return
 	}
 
 	var updates map[string]interface{}
 	if err := c.ShouldBindJSON(&updates); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		response.BadRequest(c, err.Error())
 		return
 	}
 
 	if err := h.service.Update(uint(id), updates); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		response.InternalError(c, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "success"})
+	response.SuccessWithMessage(c, "更新成功", nil)
 }
 
 func (h *ParkHandler) Delete(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		response.BadRequest(c, "invalid id")
 		return
 	}
 
 	if err := h.service.Delete(uint(id)); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		response.InternalError(c, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "success"})
+	response.SuccessWithMessage(c, "删除成功", nil)
 }
 
 func (h *ParkHandler) Renew(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		response.BadRequest(c, "invalid id")
 		return
 	}
 
@@ -116,17 +112,17 @@ func (h *ParkHandler) Renew(c *gin.Context) {
 		Duration int `json:"duration"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		response.BadRequest(c, err.Error())
 		return
 	}
 
 	park, err := h.service.Renew(uint(id), req.Duration)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		response.InternalError(c, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, park)
+	response.SuccessWithMessage(c, "续费成功", park)
 }
 
 func (h *ParkHandler) DownloadInfo(c *gin.Context) {

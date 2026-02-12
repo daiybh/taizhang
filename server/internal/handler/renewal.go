@@ -1,12 +1,12 @@
-
 package handler
 
 import (
-	"net/http"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
+	"taizhang-server/internal/response"
 	"taizhang-server/internal/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 type RenewalHandler struct {
@@ -18,21 +18,16 @@ func NewRenewalHandler(service *service.RenewalService) *RenewalHandler {
 }
 
 func (h *RenewalHandler) List(c *gin.Context) {
-	parkName := c.Query("park_name")
-	parkCode := c.Query("park_code")
+	parkName := c.Query("parkName")
+	parkCode := c.Query("parkCode")
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
-	pageSize, _ := strconv.Atoi(c.DefaultQuery("page_size", "10"))
+	pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "10"))
 
 	records, total, err := h.service.List(parkName, parkCode, page, pageSize)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		response.InternalError(c, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"data":  records,
-		"total": total,
-		"page":  page,
-		"page_size": pageSize,
-	})
+	response.SuccessPage(c, records, int64(total), page, pageSize)
 }

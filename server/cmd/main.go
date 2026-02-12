@@ -6,6 +6,7 @@ import (
 	"strings"
 	"taizhang-server/internal/config"
 	"taizhang-server/internal/handler"
+	customlogger "taizhang-server/internal/logger"
 	"taizhang-server/internal/middleware"
 	"taizhang-server/internal/model"
 	"taizhang-server/internal/repository"
@@ -19,6 +20,15 @@ import (
 )
 
 func main() {
+	// 初始化日志系统
+	// logs 目录，保留 30 天的日志
+	if err := customlogger.Init("./logs", 30); err != nil {
+		log.Fatalf("Failed to initialize logger: %v", err)
+	}
+	defer customlogger.Close()
+
+	log.Println("=== 台账管理系统启动 ===")
+
 	// 加载配置
 	cfg := config.Load()
 

@@ -146,11 +146,6 @@ app = createApp({
     },
     
     mounted() {
-        // 注册 Element Plus 图标
-        for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-            this.component('ElIcon' + key, component);
-        }
-        
         // 加载初始数据
         this.loadParks();
     },
