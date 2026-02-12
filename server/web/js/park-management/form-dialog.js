@@ -26,17 +26,17 @@ const ParkFormDialog = {
                 <el-form-item label="行业" prop="industry">
                     <el-input v-model="form.industry" placeholder="请输入行业" />
                 </el-form-item>
-                <el-form-item label="联系人" prop="contact">
-                    <el-input v-model="form.contact" placeholder="请输入联系人" />
+                <el-form-item label="联系人" prop="contact_name">
+                    <el-input v-model="form.contact_name" placeholder="请输入联系人" />
                 </el-form-item>
-                <el-form-item label="联系电话" prop="contactPhone">
-                    <el-input v-model="form.contactPhone" placeholder="请输入联系电话" />
+                <el-form-item label="联系电话" prop="contact_phone">
+                    <el-input v-model="form.contact_phone" placeholder="请输入联系电话" />
                 </el-form-item>
-                <el-form-item label="开始时间" prop="startTime" v-if="mode === 'add'">
-                    <el-date-picker v-model="form.startTime" type="date" placeholder="选择开始时间" style="width: 100%;" />
+                <el-form-item label="开始时间" prop="start_time" v-if="mode === 'add'">
+                    <el-date-picker v-model="form.start_time" type="date" placeholder="选择开始时间" style="width: 100%;" />
                 </el-form-item>
-                <el-form-item label="结束时间" prop="endTime" v-if="mode === 'add'">
-                    <el-date-picker v-model="form.endTime" type="date" placeholder="选择结束时间" style="width: 100%;" />
+                <el-form-item label="结束时间" prop="end_time" v-if="mode === 'add'">
+                    <el-date-picker v-model="form.end_time" type="date" placeholder="选择结束时间" style="width: 100%;" />
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
                     <el-input v-model="form.remark" type="textarea" :rows="3" placeholder="请输入备注" />
@@ -76,17 +76,17 @@ const ParkFormDialog = {
                 city: '',
                 district: '',
                 industry: '',
-                contact: '',
-                contactPhone: '',
-                startTime: '',
-                endTime: '',
+                contact_name: '',
+                contact_phone: '',
+                start_time: '',
+                end_time: '',
                 remark: ''
             },
             rules: {
                 name: [{ required: true, message: '请输入车场名称', trigger: 'blur' }],
                 code: [{ required: true, message: '请输入车场编号', trigger: 'blur' }],
-                contact: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
-                contactPhone: [
+                contact_name: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
+                contact_phone: [
                     { required: true, message: '请输入联系电话', trigger: 'blur' },
                     { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
                 ]
@@ -121,8 +121,8 @@ const ParkFormDialog = {
                 const now = new Date();
                 const oneYearLater = new Date();
                 oneYearLater.setFullYear(now.getFullYear() + 1);
-                this.form.startTime = now;
-                this.form.endTime = oneYearLater;
+                this.form.start_time = now;
+                this.form.end_time = oneYearLater;
             }
             // 清除验证
             this.$nextTick(() => {
@@ -139,10 +139,10 @@ const ParkFormDialog = {
                 city: '',
                 district: '',
                 industry: '',
-                contact: '',
-                contactPhone: '',
-                startTime: '',
-                endTime: '',
+                contact_name: '',
+                contact_phone: '',
+                start_time: '',
+                end_time: '',
                 remark: ''
             };
             this.$refs.formRef?.resetFields();
@@ -161,8 +161,8 @@ const ParkFormDialog = {
                 
                 const data = {
                     ...this.form,
-                    startTime: formatDate(this.form.startTime),
-                    endTime: formatDate(this.form.endTime)
+                    start_time: formatDate(this.form.start_time),
+                    end_time: formatDate(this.form.end_time)
                 };
                 
                 let result;

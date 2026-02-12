@@ -17,24 +17,24 @@ const ParkInfo = {
                     </el-form-item>
                     
                     <el-form-item label="密钥">
-                        <el-input v-model="form.secretKey" disabled type="textarea" :rows="2" />
+                        <el-input v-model="form.secret_key" disabled type="textarea" :rows="2" />
                     </el-form-item>
                     
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="创建时间">
-                                <el-input v-model="form.createdAt" disabled />
+                                <el-input v-model="form.created_at" disabled />
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="开始时间">
-                                <el-input v-model="form.startTime" disabled />
+                                <el-input v-model="form.start_time" disabled />
                             </el-form-item>
                         </el-col>
                     </el-row>
                     
                     <el-form-item label="结束时间">
-                        <el-input v-model="form.endTime" disabled />
+                        <el-input v-model="form.end_time" disabled />
                     </el-form-item>
                     
                     <el-row :gutter="20">
@@ -61,13 +61,13 @@ const ParkInfo = {
                     
                     <el-row :gutter="20">
                         <el-col :span="12">
-                            <el-form-item label="联系人" prop="contact">
-                                <el-input v-model="form.contact" :disabled="!isEditing" />
+                            <el-form-item label="联系人" prop="contact_name">
+                                <el-input v-model="form.contact_name" :disabled="!isEditing" />
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="联系电话" prop="contactPhone">
-                                <el-input v-model="form.contactPhone" :disabled="!isEditing" />
+                            <el-form-item label="联系电话" prop="contact_phone">
+                                <el-input v-model="form.contact_phone" :disabled="!isEditing" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -95,23 +95,23 @@ const ParkInfo = {
                 id: null,
                 name: '',
                 code: '',
-                secretKey: '',
-                createdAt: '',
-                startTime: '',
-                endTime: '',
+                secret_key: '',
+                created_at: '',
+                start_time: '',
+                end_time: '',
                 province: '',
                 city: '',
                 district: '',
                 industry: '',
-                contact: '',
-                contactPhone: '',
+                contact_name: '',
+                contact_phone: '',
                 remark: ''
             },
             originalForm: null,
             rules: {
                 name: [{ required: true, message: '请输入车场名称', trigger: 'blur' }],
-                contact: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
-                contactPhone: [
+                contact_name: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
+                contact_phone: [
                     { required: true, message: '请输入联系电话', trigger: 'blur' },
                     { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
                 ]
@@ -141,16 +141,16 @@ const ParkInfo = {
                         id: park.id,
                         name: park.name,
                         code: park.code,
-                        secretKey: park.secretKey,
-                        createdAt: formatDate(park.createdAt),
-                        startTime: formatDate(park.startTime),
-                        endTime: formatDate(park.endTime),
+                        secret_key: park.secret_key,
+                        created_at: formatDate(park.created_at),
+                        start_time: formatDate(park.start_time),
+                        end_time: formatDate(park.end_time),
                         province: park.province,
                         city: park.city,
                         district: park.district,
                         industry: park.industry,
-                        contact: park.contact,
-                        contactPhone: park.contactPhone,
+                        contact_name: park.contact_name,
+                        contact_phone: park.contact_phone,
                         remark: park.remark
                     };
                 } else {
@@ -188,8 +188,8 @@ const ParkInfo = {
                     city: this.form.city,
                     district: this.form.district,
                     industry: this.form.industry,
-                    contact: this.form.contact,
-                    contactPhone: this.form.contactPhone,
+                    contact_name: this.form.contact_name,
+                    contact_phone: this.form.contact_phone,
                     remark: this.form.remark
                 };
                 

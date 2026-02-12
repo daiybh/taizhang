@@ -24,13 +24,13 @@ const RenewalRecords = {
                 
                 <el-table :data="list" border stripe style="width: 100%">
                     <el-table-column type="index" label="序号" width="60" align="center" />
-                    <el-table-column prop="parkName" label="车场名称" min-width="120" />
-                    <el-table-column prop="parkCode" label="车场编号" min-width="120" />
-                    <el-table-column prop="oldEndTime" label="续费前结束时间" min-width="150" />
-                    <el-table-column prop="newEndTime" label="续费后结束时间" min-width="150" />
+                    <el-table-column prop="park_name" label="车场名称" min-width="120" />
+                    <el-table-column prop="park_code" label="车场编号" min-width="120" />
+                    <el-table-column prop="old_end_time" label="续费前结束时间" min-width="150" />
+                    <el-table-column prop="new_end_time" label="续费后结束时间" min-width="150" />
                     <el-table-column prop="province" label="省" width="80" />
                     <el-table-column prop="duration" label="续费时长(月)" width="120" align="center" />
-                    <el-table-column prop="renewalTime" label="续费时间" min-width="150" />
+                    <el-table-column prop="renewal_time" label="续费时间" min-width="150" />
                 </el-table>
                 
                 <el-pagination
@@ -79,10 +79,14 @@ const RenewalRecords = {
                 
                 if (data.code === 0) {
                     this.list = (data.data?.list || []).map(item => ({
-                        ...item,
-                        oldEndTime: formatDate(item.oldEndTime),
-                        newEndTime: formatDate(item.newEndTime),
-                        renewalTime: formatDate(item.renewalTime)
+                            ...item,
+                            park_name: item.park?.name || '未知',
+                            park_code: item.park?.code || '',
+                            province: item.park?.province || '',
+                            old_end_time: formatDate(item.old_end_time),
+                            new_end_time: formatDate(item.new_end_time),
+                            renewal_time: formatDate(item.renewal_time),
+                            created_at: formatDate(item.created_at)
                     }));
                     this.pagination.total = data.data?.total || 0;
                 } else {

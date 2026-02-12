@@ -73,14 +73,14 @@ const ParkRenewDialog = {
         },
         
         currentEndTime() {
-            if (!this.data?.endTime) return '';
-            return formatDate(this.data.endTime);
+            if (!this.data?.end_time) return '';
+            return formatDate(this.data.end_time);
         },
         
         newEndTime() {
-            if (!this.data?.endTime || !this.form.duration) return '';
+            if (!this.data?.end_time || !this.form.duration) return '';
             
-            const endDate = new Date(this.data.endTime);
+            const endDate = new Date(this.data.end_time);
             endDate.setMonth(endDate.getMonth() + this.form.duration);
             return formatDate(endDate);
         }

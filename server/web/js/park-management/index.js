@@ -35,16 +35,18 @@ const ParkManagement = {
                     <el-table-column type="index" label="序号" width="60" align="center" />
                     <el-table-column prop="name" label="车场名称" min-width="120" />
                     <el-table-column prop="code" label="车场编号" min-width="120" />
-                    <el-table-column prop="secretKey" label="密钥" min-width="150" show-overflow-tooltip />
-                    <el-table-column prop="createdAt" label="创建时间" min-width="150" />
-                    <el-table-column prop="startTime" label="开始时间" min-width="120" />
-                    <el-table-column prop="endTime" label="结束时间" min-width="120" />
+                    <el-table-column prop="secret_key" label="密钥" min-width="150" show-overflow-tooltip />
+                    <el-table-column prop="login_account" label="登录账号" width="100" align="center" />
+                    <el-table-column prop="login_password" label="登录密码" width="100" align="center" />
+                    <el-table-column prop="created_at" label="创建时间" min-width="150" />
+                    <el-table-column prop="start_time" label="开始时间" min-width="120" />
+                    <el-table-column prop="end_time" label="结束时间" min-width="120" />
                     <el-table-column prop="province" label="省" width="80" />
                     <el-table-column prop="city" label="市" width="80" />
                     <el-table-column prop="district" label="区" width="80" />
                     <el-table-column prop="industry" label="行业" min-width="100" />
-                    <el-table-column prop="contact" label="联系人" width="100" />
-                    <el-table-column prop="contactPhone" label="联系电话" min-width="120" />
+                    <el-table-column prop="contact_name" label="联系人" width="100" />
+                    <el-table-column prop="contact_phone" label="联系电话" min-width="120" />
                     <el-table-column label="操作" width="280" fixed="right" align="center">
                         <template #default="scope">
                             <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
@@ -112,9 +114,9 @@ const ParkManagement = {
                 if (data.code === 0) {
                     this.list = (data.data?.list || []).map(item => ({
                         ...item,
-                        createdAt: formatDate(item.createdAt),
-                        startTime: formatDate(item.startTime),
-                        endTime: formatDate(item.endTime)
+                        created_at: formatDate(item.created_at),
+                        start_time: formatDate(item.start_time),
+                        end_time: formatDate(item.end_time)
                     }));
                     this.pagination.total = data.data?.total || 0;
                 } else {
@@ -184,13 +186,13 @@ const ParkManagement = {
             const content = `车场信息
 车场名称：${row.name}
 车场编号：${row.code}
-密钥：${row.secretKey}
-创建时间：${row.createdAt}
-开始时间：${row.startTime}
-结束时间：${row.endTime}
+密钥：${row.secret_key}
+创建时间：${row.created_at}
+开始时间：${row.start_time}
+结束时间：${row.end_time}
 登陆网址：http://localhost:8080
-账号：${row.loginAccount || 'admin'}
-密码：${row.loginPassword || '请联系管理员'}`;
+账号：${row.login_account || '未设置'}
+密码：${row.login_password || '未设置'}`;
 
             const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
