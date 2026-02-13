@@ -1,2 +1,5 @@
 .DS_Store
 logs/server-2026-02-12.log
+server/release/
+*.tar.gz
+miniprogram/project.config.json

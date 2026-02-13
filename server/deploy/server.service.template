@@ -1,0 +1,16 @@
+[Unit]
+Description=台账服务 (taizhang)
+After=network.target
+
+[Service]
+Type=simple
+User=taizhang
+Group=taizhang
+WorkingDirectory=/opt/taizhang
+ExecStart=/opt/taizhang/bin/taizhang-server --config /opt/taizhang/config/config.yaml
+Restart=on-failure
+RestartSec=5s
+Environment=GODEBUG="http2server=0"
+
+[Install]
+WantedBy=multi-user.target
